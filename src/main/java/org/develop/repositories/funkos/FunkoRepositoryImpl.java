@@ -77,7 +77,7 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                                         .name(row.get("name",String.class))
                                         .uuid(row.get("uuid", UUID.class))
                                         .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
-                                        .precio(row.get("precio",Float.class).doubleValue())
+                                        .precio(row.get("precio",Double.class))
                                         .fecha_lanzamiento(row.get("fecha_lanzamiento", LocalDate.class))
                                         .created_at(row.get("created_at", LocalDateTime.class))
                                         .updated_at(row.get("updated_at", LocalDateTime.class))
@@ -118,6 +118,7 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                         .bind(1,funko.getModelo().toString())
                         .bind(2,funko.getPrecio())
                         .bind(3,funko.getUpdated_at())
+                        .bind(4,funko.getId())
                         .execute()
 
                 ).then(Mono.just(funko)),
@@ -169,7 +170,7 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                                 .uuid(row.get("uuid", UUID.class))
                                 .name(row.get("name",String.class))
                                 .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
-                                .precio(row.get("precio", Float.class).doubleValue())
+                                .precio(row.get("precio", Double.class))
                                 .fecha_lanzamiento(row.get("fecha_lanzamiento",LocalDate.class))
                                 .created_at(row.get("created_at",LocalDateTime.class))
                                 .updated_at(row.get("updated_at", LocalDateTime.class))

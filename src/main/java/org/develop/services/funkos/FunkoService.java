@@ -14,6 +14,8 @@ public interface FunkoService {
 
     // Buscar por ID
     Mono<Funko> findById(Integer id);
+    //Buscar por nombre
+    Flux<Funko> findByName(String name);
 
     // Guardar
     Mono<Funko> save(Funko funko);
@@ -30,4 +32,5 @@ public interface FunkoService {
     Mono<Boolean> backup(String file);
 
     Flux<Funko> imported(String file);
+
 }

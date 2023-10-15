@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FunkoServiceImpl implements FunkoService{
@@ -52,6 +53,12 @@ public class FunkoServiceImpl implements FunkoService{
     }
 
     @Override
+    public Flux<Funko> findByName(String name) {
+        logger.debug("Buscando todos los funkos por nombre: " + name);
+        return funkoRepository.findByName(name);
+    }
+
+    @Override
     public Mono<Funko> save(Funko funko) {
         logger.debug("Guardando Funko " + funko.getName());
         return funkoRepository.save(funko)
@@ -89,7 +96,9 @@ public class FunkoServiceImpl implements FunkoService{
     @Override
     public Mono<Boolean> backup(String file) {
         logger.debug("Realizando Backup de Funkos");
-        return null;
+        return findAll()
+                .collectList()
+                .flatMap(funkos -> backupManager.writeFile(file,funkos));
     }
 
     @Override

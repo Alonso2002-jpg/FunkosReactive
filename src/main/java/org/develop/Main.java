@@ -31,15 +31,48 @@ public class Main {
                 () -> System.out.println("Completado")
         );
 
+        //Importando Funkos
         var impFunkos = funkoService.imported("funkos.csv");
 
-        impFunkos.subscribe( fk -> funkoService.save(fk).subscribe(
+        //Guardando Funkos en la BD (Solo 20)
+        impFunkos
+                .subscribe( fk -> funkoService.save(fk).subscribe(
                 fkIn -> System.out.println("Funko Insertado")
         ));
 
-        var allFunks = funkoService.findAll();
-        allFunks.collectList().subscribe(
-               System.out::println
-        );
+//        //Obteniendo Funko con id: 6
+//        var funkID = funkoService.findById(6);
+//        funkID.subscribe(fkn -> {
+//            System.out.println("Funko obtenido de la BD: " + fkn);
+//            fkn.setName("Update Funko");
+//            fkn.setPrecio(100.0);
+//            //Actualizando Funko con id: 6
+//            funkoService.update(fkn).subscribe(
+//                fknUpd -> System.out.println("Funko Actualizando: " + fknUpd)
+//        );});
+//
+//        //Eliminando Funko con id: 6
+//        var delID = funkoService.deleteById(6);
+//        delID.subscribe(fknDel -> System.out.println("Funko Eliminado : " + fknDel));
+//
+//        //Obteniendo 10 Funkos de la BD
+//        var allFunks = funkoService.findAll();
+//        allFunks.take(10)
+//                .subscribe(System.out::println);
+//
+//        //Obteniendo Funkos con nombre: Stitch
+//        funkoService.findByName("Stitch").subscribe(System.out::println);
+//
+//        //Haciendo Backup de Funkos
+//        funkoService.backup("funkosBack.json").subscribe(succes -> System.out.println("Realizado? " + succes));
+//
+//        //Eliminando todos los Funkos de la BD
+//        funkoService.deleteAll().subscribe();
+//
+//        //Obteniendo los Funkos de la BD (Vacia)
+//        funkoService.findAll().subscribe(System.out::println);
+
+        //Consultas de Funkos Reactivas
+
     }
 }
