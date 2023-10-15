@@ -2,7 +2,6 @@ package org.develop.model;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.develop.locale.MyLocale;
 
 import java.time.LocalDate;
