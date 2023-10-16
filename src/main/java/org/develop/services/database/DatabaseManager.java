@@ -18,6 +18,9 @@ import java.time.Duration;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+/**
+ * Gestiona la base de datos y la conexion a la misma.
+ */
 public class DatabaseManager {
 
     private static DatabaseManager instance;
@@ -48,6 +51,11 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Obtiene una instancia unica de la clase DatabaseManager.
+     *
+     * @return Una instancia de DatabaseManager.
+     */
     public static DatabaseManager getInstance(){
         if (instance == null){
             instance=new DatabaseManager();
@@ -72,6 +80,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Inicializa las tablas de la base de datos.
+     */
     public synchronized void initTables(){
         logger.debug("Borrando tablas de la Base de Datos");
         executeScript("delete.sql").block();
@@ -80,6 +91,12 @@ public class DatabaseManager {
         logger.debug("Tabla inicializada correctamente");
     }
 
+    /**
+     * Ejecuta un script en la base de datos.
+     *
+     * @param script El nombre del script a ejecutar.
+     * @return Un mono (Mono) que indica la finalizacion exitosa de la operacion.
+     */
         public synchronized Mono<Void> executeScript(String script){
             logger.debug("Executing of Init Script: " + script);
                     return Mono.usingWhen(
@@ -108,6 +125,11 @@ public class DatabaseManager {
         ).then();
     }
 
+    /**
+     * Obtiene el pool de conexiones de la base de datos.
+     *
+     * @return El pool de conexiones de la base de datos.
+     */
     public ConnectionPool getConnectionPool(){
         return this.pool;
     }
