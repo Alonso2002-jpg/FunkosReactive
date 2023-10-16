@@ -36,7 +36,7 @@ public class BackupManagerImpl implements BackupManager<Funko> {
     }
     @Override
     public Flux<Funko> readFile(String nomFile) {
-        logger.debug("Escribiendo fichero JSON");
+        logger.debug("Leyendo fichero CSV");
         String path = Paths.get("").toAbsolutePath().toString() + File.separator + "data" + File.separator + nomFile;
         return Flux.create(sink->{
         try(BufferedReader reader =new BufferedReader(new FileReader(path))){
@@ -57,6 +57,7 @@ public class BackupManagerImpl implements BackupManager<Funko> {
 
     @Override
     public Mono<Boolean> writeFile(String nomFile, List<Funko> list) {
+        logger.debug("Escribiendo fichero JSON");
         String path = Paths.get("").toAbsolutePath().toString() + File.separator + "data" + File.separator + nomFile;
         return Mono.create(sink ->{
                    Gson gs = new GsonBuilder()

@@ -19,7 +19,9 @@ public class Funko {
     private Modelo modelo;
     private double precio;
     private LocalDate fecha_lanzamiento;
+    @Builder.Default
     private LocalDateTime created_at = LocalDateTime.now();
+    @Builder.Default
     private LocalDateTime updated_at = LocalDateTime.now();
     @Override
     public String toString() {

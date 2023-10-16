@@ -33,7 +33,7 @@ public class DatabaseManager {
     private DatabaseManager(){
         configFromProperties();
 
-        connectionFactory = ConnectionFactories.get(serverUrl);
+        connectionFactory = ConnectionFactories.get(conURL);
 
         ConnectionPoolConfiguration configuration = ConnectionPoolConfiguration
                 .builder(connectionFactory)

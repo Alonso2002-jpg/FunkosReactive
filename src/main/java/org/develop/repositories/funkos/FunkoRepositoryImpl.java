@@ -40,18 +40,18 @@ public class FunkoRepositoryImpl implements FunkoRepository{
     @Override
     public Flux<Funko> findAll() {
         logger.debug("Buscando todos los alumnos");
-        String sql = "SELECT * FROM ALUMNOS";
+        String sql = "SELECT * FROM FUNKO";
         return Flux.usingWhen(
                 connectionFactory.create(),
                 connection -> Flux.from(connection.createStatement(sql).execute())
                         .flatMap(result -> result.map((row, rowMetadata) ->
                                 Funko.builder()
                                         .id(row.get("id",Integer.class))
-                                        .myId(row.get("my_id",Long.class))
+                                        .myId(row.get("myid",Long.class))
                                         .name(row.get("name",String.class))
                                         .uuid(row.get("uuid", UUID.class))
-                                        .modelo(row.get("modelo", Modelo.class))
-                                        .precio(row.get("precio",Double.class))
+                                        .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
+                                        .precio(row.get("precio", Double.class))
                                         .fecha_lanzamiento(row.get("fecha_lanzamiento", LocalDate.class))
                                         .created_at(row.get("created_at", LocalDateTime.class))
                                         .updated_at(row.get("updated_at", LocalDateTime.class))
@@ -73,10 +73,10 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                 ).flatMap(result -> Mono.from(result.map((row, rowMetadata) ->
                         Funko.builder()
                                         .id(row.get("id",Integer.class))
-                                        .myId(row.get("my_id",Long.class))
+                                        .myId(row.get("myid",Long.class))
                                         .name(row.get("name",String.class))
                                         .uuid(row.get("uuid", UUID.class))
-                                        .modelo(row.get("modelo", Modelo.class))
+                                        .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
                                         .precio(row.get("precio",Double.class))
                                         .fecha_lanzamiento(row.get("fecha_lanzamiento", LocalDate.class))
                                         .created_at(row.get("created_at", LocalDateTime.class))
@@ -90,14 +90,14 @@ public class FunkoRepositoryImpl implements FunkoRepository{
     @Override
     public Mono<Funko> save(Funko funko) {
         logger.debug("Saving Funko on DB");
-        String sql = "INSERT INTO FUNKO (myid,uuid.name,modelo,precio,fecha_lanzamiento) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO FUNKO (myid,uuid,name,modelo,precio,fecha_lanzamiento) VALUES (?,?,?,?,?,?)";
         return Mono.usingWhen(
                 connectionFactory.create(),
                 connection -> Mono.from(connection.createStatement(sql)
                         .bind(0, idGenerator.getIDandIncrement())
                         .bind(1, funko.getUuid())
                         .bind(2, funko.getName())
-                        .bind(3,funko.getModelo())
+                        .bind(3,funko.getModelo().toString())
                         .bind(4,funko.getPrecio())
                         .bind(5,funko.getFecha_lanzamiento())
                         .execute()
@@ -115,9 +115,10 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                 connectionFactory.create(),
                 connection -> Mono.from(connection.createStatement(sql)
                         .bind(0,funko.getName())
-                        .bind(1,funko.getModelo())
+                        .bind(1,funko.getModelo().toString())
                         .bind(2,funko.getPrecio())
                         .bind(3,funko.getUpdated_at())
+                        .bind(4,funko.getId())
                         .execute()
 
                 ).then(Mono.just(funko)),
@@ -168,12 +169,39 @@ public class FunkoRepositoryImpl implements FunkoRepository{
                                 .myId(row.get("myid",Long.class))
                                 .uuid(row.get("uuid", UUID.class))
                                 .name(row.get("name",String.class))
-                                .modelo(row.get("modelo", Modelo.class))
+                                .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
+                                .precio(row.get("precio", Double.class))
                                 .fecha_lanzamiento(row.get("fecha_lanzamiento",LocalDate.class))
                                 .created_at(row.get("created_at",LocalDateTime.class))
                                 .updated_at(row.get("updated_at", LocalDateTime.class))
                                 .build()
                 )),Connection::close
+        );
+    }
+
+    @Override
+    public Mono<Funko> findByUuid(UUID uuid) {
+        logger.debug("Buscando funko por uuid: " + uuid);
+        String sql = "SELECT * FROM FUNKO WHERE uuid = ?";
+        return Mono.usingWhen(
+                connectionFactory.create(),
+                connection -> Mono.from(connection.createStatement(sql)
+                        .bind(0, uuid)
+                        .execute()
+                ).flatMap(result -> Mono.from(result.map((row, rowMetadata) ->
+                        Funko.builder()
+                                        .id(row.get("id",Integer.class))
+                                        .myId(row.get("myid",Long.class))
+                                        .name(row.get("name",String.class))
+                                        .uuid(row.get("uuid", UUID.class))
+                                        .modelo(Modelo.valueOf(row.get("modelo", Object.class).toString()))
+                                        .precio(row.get("precio",Double.class))
+                                        .fecha_lanzamiento(row.get("fecha_lanzamiento", LocalDate.class))
+                                        .created_at(row.get("created_at", LocalDateTime.class))
+                                        .updated_at(row.get("updated_at", LocalDateTime.class))
+                                        .build()
+                ))),
+                Connection::close
         );
     }
 }
