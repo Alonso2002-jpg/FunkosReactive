@@ -1,0 +1,11 @@
+org.develop
+org.develop.adapters
+org.develop.exceptions
+org.develop.locale
+org.develop.model
+org.develop.repositories.crud
+org.develop.repositories.funkos
+org.develop.services.cache
+org.develop.services.database
+org.develop.services.files
+org.develop.services.funkos

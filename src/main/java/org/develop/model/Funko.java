@@ -9,6 +9,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+/**
+ * Clase que representa un Funko, un objeto coleccionable relacionado con figuras
+ * de vinilo. Cada Funko tiene un identificador inico, un nombre, un modelo, un precio,
+ * una fecha de lanzamiento y fechas de creacion y actualizacion.
+ *
+ * @author Alonso Cruz, Joselyn Obando
+ */
 @Data
 @Builder
 public class Funko {
@@ -23,6 +30,12 @@ public class Funko {
     private LocalDateTime created_at = LocalDateTime.now();
     @Builder.Default
     private LocalDateTime updated_at = LocalDateTime.now();
+
+    /**
+     * Convierte el Funko en una representacion de cadena.
+     *
+     * @return Una cadena que representa el Funko.
+     */
     @Override
     public String toString() {
         return "Funko{" +
@@ -36,6 +49,12 @@ public class Funko {
                 '}';
     }
 
+    /**
+     * Establece los atributos del Funko a partir de una cadena dada.
+     *
+     * @param line La cadena que contiene los atributos del Funko en un formato especifico.
+     * @return El objeto Funko con los atributos establecidos.
+     */
     public Funko setFunko(String line){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String[] lineas = line.split(",");

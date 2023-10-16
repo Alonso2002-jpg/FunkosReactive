@@ -21,6 +21,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementacion de la interfaz BackupManager para leer y escribir datos de respaldo en archivos.
+ */
 public class BackupManagerImpl implements BackupManager<Funko> {
     private static BackupManagerImpl instance;
     private Logger logger = LoggerFactory.getLogger(BackupManagerImpl.class);
@@ -29,11 +32,23 @@ public class BackupManagerImpl implements BackupManager<Funko> {
 
     }
 
+    /**
+     * Obtiene una instancia unica de BackupManagerImpl.
+     *
+     * @return La instancia de BackupManagerImpl.
+     */
     public static BackupManagerImpl getInstance(){
         if (instance == null) instance=new BackupManagerImpl();
 
         return instance;
     }
+
+    /**
+     * Lee un archivo CSV que contiene datos de Funko Pops y los convierte en un flujo de objetos Funko.
+     *
+     * @param nomFile Nombre del archivo CSV a leer.
+     * @return Un flujo (stream) de objetos Funko.
+     */
     @Override
     public Flux<Funko> readFile(String nomFile) {
         logger.debug("Leyendo fichero CSV");
@@ -55,6 +70,13 @@ public class BackupManagerImpl implements BackupManager<Funko> {
         });
     }
 
+    /**
+     * Escribe una lista de objetos Funko en un archivo JSON.
+     *
+     * @param nomFile Nombre del archivo JSON a escribir.
+     * @param list    Lista de objetos Funko a escribir en el archivo.
+     * @return Un mono que indica si la escritura se realizo con exito (true) o no (false).
+     */
     @Override
     public Mono<Boolean> writeFile(String nomFile, List<Funko> list) {
         logger.debug("Escribiendo fichero JSON");

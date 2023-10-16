@@ -25,13 +25,13 @@ public class Main {
                 notificacion -> {
                     switch (notificacion.getTipo()) {
                         case NEW:
-                            System.out.println("🟢 Alumno insertado: " + notificacion.getContenido());
+                            System.out.println("🟢 Funko insertado: " + notificacion.getContenido());
                             break;
                         case UPDATED:
-                            System.out.println("🟠 Alumno actualizado: " + notificacion.getContenido());
+                            System.out.println("🟠 Funko actualizado: " + notificacion.getContenido());
                             break;
                         case DELETED:
-                            System.out.println("🔴 Alumno eliminado: " + notificacion.getContenido());
+                            System.out.println("🔴 Funko eliminado: " + notificacion.getContenido());
                             break;
                     }
                 },

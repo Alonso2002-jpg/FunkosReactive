@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Interfaz que define operaciones para el servicio relacionado con objetos Funko. Proporciona métodos para buscar, guardar, actualizar y eliminar Funkos, asi como realizar operaciones de respaldo e importacion.
+ */
 public interface FunkoService {
         // Buscar todos
     Flux<Funko> findAll();
