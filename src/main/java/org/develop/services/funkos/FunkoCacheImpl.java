@@ -64,6 +64,7 @@ public class FunkoCacheImpl implements FunkoCache{
         });
     }
 
+
     @Override
     public void shutdown() {
         cleaner.shutdown();

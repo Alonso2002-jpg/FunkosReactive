@@ -58,30 +58,41 @@ public class FunkoServiceImpl implements FunkoService{
         return funkoRepository.findByName(name);
     }
 
+    public Mono<Funko> saveWithOutNotification(Funko funko){
+         return funkoRepository.save(funko)
+                .flatMap(saved -> funkoRepository.findByUuid(saved.getUuid()));
+    }
+
     @Override
     public Mono<Funko> save(Funko funko) {
         logger.debug("Guardando Funko " + funko.getName());
-        return funkoRepository.save(funko)
-                .flatMap(saved -> funkoRepository.findByUuid(saved.getUuid()))
+        return saveWithOutNotification(funko)
                 .doOnSuccess(fkSaved -> notification.notify(new Notificacion<>(Notificacion.Tipo.NEW,fkSaved)));
     }
 
+    public Mono<Funko> updateWithOutNotification(Funko funko){
+        return funkoRepository.update(funko)
+                .flatMap(updated->findById(updated.getId()));
+    }
     @Override
     public Mono<Funko> update(Funko funko) {
         logger.debug("Actualizando Funko " + funko.getName());
-        return funkoRepository.update(funko)
-                .flatMap(updated->findById(updated.getId()))
+        return updateWithOutNotification(funko)
                 .doOnSuccess(fkUpdated->notification.notify(new Notificacion<>(Notificacion.Tipo.UPDATED,fkUpdated)));
     }
 
-    @Override
-    public Mono<Funko> deleteById(Integer id) {
-        logger.debug("Eliminando Funko con ID " + id);
+
+    public Mono<Funko> deleteByIdWithOutNotification(Integer id){
         return funkoRepository.findById(id)
                 .switchIfEmpty(Mono.error(new FunkoNotFoundException("Funko with id " + id + " not found")))
                 .flatMap(funko -> cache.remove(funko.getId())
                         .then(funkoRepository.deleteById(funko.getId()))
-                        .thenReturn(funko))
+                        .thenReturn(funko));
+    }
+    @Override
+    public Mono<Funko> deleteById(Integer id) {
+        logger.debug("Eliminando Funko con ID " + id);
+        return deleteByIdWithOutNotification(id)
                 .doOnSuccess(deleted -> notification.notify(new Notificacion<>(Notificacion.Tipo.DELETED,deleted)));
     }
 
